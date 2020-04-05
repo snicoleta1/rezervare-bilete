@@ -1,0 +1,34 @@
+version: "2"
+services:
+  server:
+    build: ./server
+    links:
+      - db
+    ports:
+      - "5000:5000"
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "32000:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+
+  client:
+    build: ./client
+    ports:
+      - "5005:5005"
+    tty: true
+    stdin_open: true
+
+  admin:
+    build: ./admin
+    links:
+      - db
+    ports:
+      - "5010:5010"
+    tty: true
+    stdin_open: true
+
